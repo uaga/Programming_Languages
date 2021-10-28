@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define FILE_NAME "input_num_5.t"
+#define FILE_NAME "input_num_5.txt"
 #define STACK_MAX_SIZE 100
 #define ERROR_STACK_OVERFLOW -100
 #define ERROR_STACK_UNDERFLOW -101
@@ -28,7 +28,7 @@ char* readFile(){
 	return buffer;
 }
 
-typedef char T;
+typedef int T;
 
 typedef struct Stack_tag {
         T data[STACK_MAX_SIZE];
@@ -62,7 +62,7 @@ T peek(const Stack_t *stack){
 }
 
 void printStackValue(const T value){
-        printf("%c", value);
+        printf("%d", value);
 }
 
 void printStack(const Stack_t *stack){
@@ -78,60 +78,26 @@ void printStack(const Stack_t *stack){
 }
 
 int main(){
-	char *in_text = readFile();
-	char *text;
-	char ch[1];
-	text = (char*)malloc(strlen(in_text));
-	strcpy(text, in_text);
-	printf("strlen = %d\n", strlen(text));
-	puts(text);
-	Stack_t rev_digit;
-	rev_digit.size = 0;
-	Stack_t rev_opers;
-	rev_opers.size = 0;
-	for(int i=0; i < strlen(text)-1; i++){
-		ch[0] = *(text+i);
-		if(isdigit(ch[0])){
-			push(&rev_digit, ch[0]);
-		}
-		if( ch[0]=='+' || ch[0]=='-' || ch[0]=='*' || ch[0]=='/' ){
-			push(&rev_opers, ch[0]);
+	char *text = readFile();
+	printf("Input:\n\t%s\n", text);
+	int len_text = strlen(text);
+	Stack_t stack;
+	stack.size=0;
+
+	for(int i=0; i<len_text; i++){
+		if(isdigit(text[i])) {push(&stack, (int)(text[i]-'0'));}
+		if(text[i]=='+' || text[i]=='-' || text[i]=='*' || text[i]=='/'){
+			int b = pop(&stack);
+			int a = pop(&stack);
+			switch(text[i]){
+				case '+' : {push(&stack, a+b);break;}
+				case '-' : {push(&stack, a-b);break;}
+				case '*' : {push(&stack, a*b);break;}
+				case '/' : {push(&stack, a/b);break;}
+			}
 		}
 	}
-
-	Stack_t digit;
-	digit.size = 0;
-	Stack_t opers;
-	opers.size = 0;
-
-	printStack(&rev_opers);
-	printStack(&rev_digit);
-
-	int size = rev_digit.size;
-	for(int i=0; i<size; i++) {push(&digit, pop(&rev_digit));}
-	size = rev_opers.size;
-	for(int i=0; i<size; i++) {push(&opers, pop(&rev_opers));}
-
-	printStack(&digit);
-	printStack(&opers);
-
-	printf("Вывод:\n");
-
-	while(digit.size != 1){
-		int result = 0;
-		int a = (int)pop(&digit)-48;
-		int b = (int)pop(&digit)-48;
-		char oper = pop(&opers);
-		switch(oper){
-			case '+' : {result=a+b; break;}
-			case '-' : {result=a-b; break;}
-			case '*' : {result=a*b; break;}
-			case '/' : {result=a/b; break;}
-		}
-		push(&digit, result+'0');
-		printf("%d%c%d=%c\n", a, oper, b, peek(&digit));
-	}
-	printf("\nresult = %c", pop(&digit));
+	printf("-----------------------------\nOutput:\n\t%d\n", pop(&stack));
 
 	return 0;
 }
