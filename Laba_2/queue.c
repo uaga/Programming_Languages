@@ -9,7 +9,7 @@ FIFO - first in - first out (первым зашел - первым вышел)
 #include <string.h>
 
 #define QUEUE_MAX_SIZE 100
-#define QUEUE_UNDERFLOW -100
+#define QUEUE_UNDERFLOW -101
 #define TRUE 1
 #define FALSE 0
 
@@ -25,13 +25,13 @@ typedef struct Queue_tag {
 int pushQ(Queue_t *queue, const Type_queue value){
 	/*
 	Функиция для добавления элемента в очередь
-	
-	В конец queue добавляется элемент value, 
+
+	В конец queue добавляется элемент value,
 	размер (queue->size) увеличивается на 1
-	
+
 	Если максимальный размер (QUEUE_MAX_SIZE) достигнут,
 	то фунция ничего не запишет и вернет FALSE
-	
+
 	Если элемент добавлен в очередь, функция вернет TRUE
 	 */
 	if(queue->size >= QUEUE_MAX_SIZE) {

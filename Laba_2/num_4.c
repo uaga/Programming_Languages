@@ -38,9 +38,7 @@ T peek(const Stack_t *stack){
 	return stack->data[stack->size-1];
 }
 
-void printStackValue(const T value){
-	printf("%d", value);
-}
+void printStackValue(const T value) {printf("%d", value);}
 
 void printStack(const Stack_t *stack){
 	int i;
@@ -57,11 +55,11 @@ void printStack(const Stack_t *stack){
 int main(){
 	Stack_t stack;
 	stack.size = 0;
-	
+
 	printf("Введите размер стека: ");
 	int size_stack;
 	scanf("%d", &size_stack);
-	
+
 	for(int i=0; i<size_stack; i++){
 		push(&stack, i);
 		printStack(&stack);
